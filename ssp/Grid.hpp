@@ -1,19 +1,21 @@
 #pragma once
 #include <vector>
-#include "Cell.hpp"
 
 class Grid {
 private:
-    std::vector<std::vector<Cell>> cells;
+    std::vector<std::vector<bool>> cells;
+    std::vector<std::vector<bool>> previousState;
     int width;
     int height;
 
 public:
-    Grid(int w, int h);
-    void setCellState(int x, int y, bool state);
+    Grid(int height, int width);
+    void update();
     bool getCellState(int x, int y) const;
-    int countLiveNeighbors(int x, int y) const;
-    void updateCells();
-    int getWidth() const;
-    int getHeight() const;
+    void setCellState(int x, int y, bool state);
+    int getWidth() const { return width; }
+    int getHeight() const { return height; }
+    bool isStable() const;
+private:
+    int countNeighbors(int x, int y) const;
 };

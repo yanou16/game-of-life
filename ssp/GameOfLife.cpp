@@ -1,105 +1,102 @@
 #include "GameOfLife.hpp"
-#include "ConsoleRender.hpp"
-#include "SFMLRender.hpp"
-#include <fstream>
 #include <iostream>
-#include <thread>
+#include <fstream>
 #include <chrono>
+#include <thread>
 #include <stdexcept>
 
 GameOfLife::GameOfLife(const std::string& filename, GameMode mode)
-    : grid(1, 1), simulationSpeed(500) {
-    loadFromFile(filename);
+    : grid(20, 20), simulationSpeed(100) {  // Grille par défaut 20x20
 
-    switch (mode) {
-    case GameMode::CONSOLE:
-        renderer = std::make_unique<ConsoleRender>(filename);
-        std::cout << "Console mode initialized. Output directory: " << filename << "_out" << std::endl;
-        break;
-    case GameMode::GRAPHICAL:
-        renderer = std::make_unique<SFMLRender>(grid.getWidth(), grid.getHeight());
-        std::cout << "Graphical mode initialized." << std::endl;
-        break;
-    }
-}
-
-void GameOfLife::loadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        throw std::runtime_error("Could not open file: " + filename);
+        // Créer un planeur au centre de la grille
+        int centerX = 10;
+        int centerY = 10;
+
+        // Planeur
+        grid.setCellState(centerX - 1, centerY, true);
+        grid.setCellState(centerX, centerY + 1, true);
+        grid.setCellState(centerX - 2, centerY + 2, true);
+        grid.setCellState(centerX - 1, centerY + 2, true);
+        grid.setCellState(centerX, centerY + 2, true);
     }
+    else {
+        int height, width;
+        file >> height >> width;
 
-    int width, height;
-    file >> height >> width;
+        // Limiter la taille de la grille à des valeurs raisonnables
+        height = std::min(std::max(height, 10), 50);  // Entre 10 et 50
+        width = std::min(std::max(width, 10), 50);    // Entre 10 et 50
 
-    if (file.fail() || width <= 0 || height <= 0) {
-        throw std::runtime_error("Invalid grid dimensions in file: " + filename);
-    }
+        grid = Grid(height, width);
 
-    grid = Grid(width, height);
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            int state;
-            file >> state;
-            if (file.fail() || (state != 0 && state != 1)) {
-                throw std::runtime_error("Invalid cell state in file: " + filename);
+        int state;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (file >> state) {
+                    grid.setCellState(x, y, state == 1);
+                }
             }
-            grid.setCellState(x, y, state == 1);
         }
     }
 
-    std::cout << "Loaded grid: " << width << "x" << height << std::endl;
+    if (mode == GameMode::CONSOLE) {
+        renderer = std::make_unique<ConsoleRender>(filename);
+    }
+    else {
+        renderer = std::make_unique<SFMLRender>(grid.getWidth(), grid.getHeight());
+    }
 }
 
-void GameOfLife::run(int maxGenerations) {
-    int generation = 0;
-    bool running = true;
+void GameOfLife::run() {
+    int generationCount = 0;
 
-    std::cout << "Starting simulation..." << std::endl;
-    std::cout << "Press Ctrl+C to stop (console mode) or close window (graphical mode)" << std::endl;
+    if (auto* sfmlRenderer = dynamic_cast<SFMLRender*>(renderer.get())) {
+        while (sfmlRenderer->isOpen() && generationCount < maxGenerations) {
+            sfmlRenderer->handleEvents(grid);  // Nouvelle version qui prend grid en paramètre
+            sfmlRenderer->render(grid);
 
-    try {
-        while (running && (maxGenerations == -1 || generation < maxGenerations)) {
-            // Gestion des événements
+            // Mettre à jour seulement si pas en pause
+            if (!sfmlRenderer->isPauseActive()) {
+                // Vérifier si l'état est stable
+                if (grid.isStable() && generationCount > 0) {
+                    std::cout << "\n=== État stable détecté après " << generationCount << " générations ! ===\n";
+                    break;
+                }
+
+                grid.update();
+                generationCount++;
+
+                if (generationCount % 10 == 0) {
+                    std::cout << "Generation: " << generationCount << std::endl;
+                }
+
+                sf::sleep(sf::milliseconds(static_cast<int>(sfmlRenderer->getSimulationSpeed())));
+            }
+        }
+    }
+    else {
+        // Mode console (inchangé)
+        while (renderer->isOpen() && generationCount < maxGenerations) {
             renderer->handleEvents();
-            if (!renderer->isOpen()) {
-                std::cout << "Renderer closed. Stopping simulation." << std::endl;
+
+            if (grid.isStable() && generationCount > 0) {
+                std::cout << "\n=== État stable détecté après " << generationCount << " générations ! ===\n";
                 break;
             }
 
-            // Mise à jour de la grille
-            grid.updateCells();
-
-            // Rendu
+            grid.update();
             renderer->render(grid);
 
-            // Compteur de générations
-            generation++;
-            if (generation % 10 == 0) {
-                std::cout << "Generation: " << generation << std::endl;
+            generationCount++;
+            if (generationCount % 10 == 0) {
+                std::cout << "Generation: " << generationCount << std::endl;
             }
 
-            // Pause entre les générations
             std::this_thread::sleep_for(std::chrono::milliseconds(simulationSpeed));
         }
     }
-    catch (const std::exception& e) {
-        std::cerr << "Error during simulation: " << e.what() << std::endl;
-        throw;
-    }
 
-    if (maxGenerations != -1 && generation >= maxGenerations) {
-        std::cout << "Reached maximum number of generations (" << maxGenerations << ")" << std::endl;
-    }
-
-    std::cout << "Simulation ended after " << generation << " generations" << std::endl;
-}
-
-void GameOfLife::setSimulationSpeed(int speed_ms) {
-    if (speed_ms < 0) {
-        throw std::invalid_argument("Simulation speed cannot be negative");
-    }
-    simulationSpeed = speed_ms;
-    std::cout << "Simulation speed set to " << speed_ms << "ms" << std::endl;
+    std::cout << "\nSimulation terminée après " << generationCount << " générations.\n";
 }
