@@ -10,8 +10,6 @@ private:
     std::vector<sf::RectangleShape> cellShapes;
     float cellSize;
     sf::Vector2i mousePosition;
-    bool isPaused;
-    float simulationSpeed;
 
     void updateCellShapes(const Grid& grid);
     sf::Vector2i getGridCoordinates(int mouseX, int mouseY, const Grid& grid) const;
@@ -23,11 +21,5 @@ public:
     SFMLRender(int width, int height);
     void render(const Grid& grid) override;
     bool isOpen() const override;
-    void handleEvents() override;
-    void handleEvents(Grid& grid);
-
-    // Déclarations seulement, pas de définition ici
-    void setSimulationSpeed(float speed);
-    float getSimulationSpeed() const { return simulationSpeed; }
-    bool isPauseActive() const { return isPaused; }
+    void handleEvents(Grid* grid = nullptr) override;
 };

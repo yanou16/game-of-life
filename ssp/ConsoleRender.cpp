@@ -43,6 +43,6 @@ bool ConsoleRender::isOpen() const {
     return true;
 }
 
-void ConsoleRender::handleEvents() {
+void ConsoleRender::handleEvents(Grid* grid) {
     // Rien à faire pour le rendu console
 }
