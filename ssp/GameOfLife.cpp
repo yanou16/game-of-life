@@ -54,7 +54,7 @@ void GameOfLife::run() {
 
     if (auto* sfmlRenderer = dynamic_cast<SFMLRender*>(renderer.get())) {
         while (sfmlRenderer->isOpen() && generationCount < maxGenerations) {
-            sfmlRenderer->handleEvents(grid);  // Nouvelle version qui prend grid en paramètre
+            sfmlRenderer->handleEvents(&grid);  // Nouvelle version qui prend grid en paramètre
             sfmlRenderer->render(grid);
 
             // Mettre à jour seulement si pas en pause
