@@ -26,8 +26,8 @@ GameOfLife::GameOfLife(const std::string& filename, GameMode mode)
         file >> height >> width;
 
         // Limiter la taille de la grille à des valeurs raisonnables
-        height = std::min(std::max(height, 10), 50);  // Entre 10 et 50
-        width = std::min(std::max(width, 10), 50);    // Entre 10 et 50
+        height = std::min(std::max(height, 5), 50);  // Entre 10 et 50
+        width = std::min(std::max(width, 5), 50);    // Entre 10 et 50
 
         grid = Grid(height, width);
 
@@ -47,6 +47,7 @@ GameOfLife::GameOfLife(const std::string& filename, GameMode mode)
     else {
         renderer = std::make_unique<SFMLRender>(grid.getWidth(), grid.getHeight());
     }
+    renderer->setSimulationSpeed(static_cast<float>(simulationSpeed));
 }
 
 void GameOfLife::run() {
@@ -99,4 +100,11 @@ void GameOfLife::run() {
     }
 
     std::cout << "\nSimulation terminée après " << generationCount << " générations.\n";
+}
+
+void GameOfLife::setSimulationSpeed(int speed) {
+    simulationSpeed = speed;
+    if (renderer) {
+        renderer->setSimulationSpeed(static_cast<float>(speed));
+    }
 }
