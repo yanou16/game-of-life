@@ -21,6 +21,6 @@ private:
 public:
     GameOfLife(const std::string& filename, GameMode mode);
     void run();
-    void setSimulationSpeed(int speed) { simulationSpeed = speed; }
+    void setSimulationSpeed(int speed);
     void setMaxGenerations(int gens) { maxGenerations = gens; }
 };

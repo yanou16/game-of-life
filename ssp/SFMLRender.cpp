@@ -35,7 +35,8 @@ void SFMLRender::handleEvents(Grid* grid) {
             if (gridPos.x >= 0 && gridPos.x < grid->getWidth() &&
                 gridPos.y >= 0 && gridPos.y < grid->getHeight()) {
                 grid->setCellState(gridPos.x, gridPos.y,
-                    sf::Mouse::isButtonPressed(sf::Mouse::Left));
+                    sf::Mouse::isButtonPressed(sf::Mouse::Left),
+                    true);  // true pour indiquer que c'est créé par l'utilisateur
             }
         }
 
@@ -62,7 +63,7 @@ void SFMLRender::handleEvents(Grid* grid) {
                 if (grid) {
                     for (int y = 0; y < grid->getHeight(); y++) {
                         for (int x = 0; x < grid->getWidth(); x++) {
-                            grid->setCellState(x, y, false);
+                            grid->setCellState(x, y, false, false);
                         }
                     }
                     std::cout << "Grille effacée" << std::endl;
@@ -73,7 +74,7 @@ void SFMLRender::handleEvents(Grid* grid) {
                 if (grid) {
                     for (int y = 0; y < grid->getHeight(); y++) {
                         for (int x = 0; x < grid->getWidth(); x++) {
-                            grid->setCellState(x, y, rand() % 2 == 1);
+                            grid->setCellState(x, y, rand() % 2 == 1, false);  // false car généré automatiquement
                         }
                     }
                     std::cout << "Remplissage aléatoire" << std::endl;
@@ -125,28 +126,28 @@ void SFMLRender::handleEvents(Grid* grid) {
 
 void SFMLRender::placeGlider(Grid& grid, int x, int y) {
     if (x >= 0 && x + 2 < grid.getWidth() && y >= 0 && y + 2 < grid.getHeight()) {
-        grid.setCellState(x + 1, y, true);
-        grid.setCellState(x + 2, y + 1, true);
-        grid.setCellState(x, y + 2, true);
-        grid.setCellState(x + 1, y + 2, true);
-        grid.setCellState(x + 2, y + 2, true);
+        grid.setCellState(x + 1, y, true, true);
+        grid.setCellState(x + 2, y + 1, true, true);
+        grid.setCellState(x, y + 2, true, true);
+        grid.setCellState(x + 1, y + 2, true, true);
+        grid.setCellState(x + 2, y + 2, true, true);
     }
 }
 
 void SFMLRender::placeBlock(Grid& grid, int x, int y) {
     if (x >= 0 && x + 1 < grid.getWidth() && y >= 0 && y + 1 < grid.getHeight()) {
-        grid.setCellState(x, y, true);
-        grid.setCellState(x + 1, y, true);
-        grid.setCellState(x, y + 1, true);
-        grid.setCellState(x + 1, y + 1, true);
+        grid.setCellState(x, y, true, true);
+        grid.setCellState(x + 1, y, true, true);
+        grid.setCellState(x, y + 1, true, true);
+        grid.setCellState(x + 1, y + 1, true, true);
     }
 }
 
 void SFMLRender::placeBlinker(Grid& grid, int x, int y) {
     if (x >= 0 && x + 2 < grid.getWidth() && y >= 0 && y < grid.getHeight()) {
-        grid.setCellState(x, y, true);
-        grid.setCellState(x + 1, y, true);
-        grid.setCellState(x + 2, y, true);
+        grid.setCellState(x, y, true, true);
+        grid.setCellState(x + 1, y, true, true);
+        grid.setCellState(x + 2, y, true, true);
     }
 }
 
@@ -183,7 +184,12 @@ void SFMLRender::updateCellShapes(const Grid& grid) {
                 );
 
                 if (grid.getCellState(x, y)) {
-                    cellShapes[index].setFillColor(sf::Color::Green);
+                    if (grid.getCellUserCreated(x, y)) {
+                        cellShapes[index].setFillColor(sf::Color::Blue);  // Cellules utilisateur
+                    }
+                    else {
+                        cellShapes[index].setFillColor(sf::Color::Green); // Cellules automatiques
+                    }
                 }
                 else {
                     cellShapes[index].setFillColor(sf::Color::Black);
