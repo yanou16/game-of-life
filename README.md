@@ -21,18 +21,8 @@ Une implémentation du Jeu de la Vie de Conway en C++ avec SFML, permettant une 
 ## 💻 Installation
 
 1. Clonez le dépôt :
-```bash
-git clone https://github.com/yanou16/ssp.git
-
-Ouvrez le projet dans Visual Studio :
-Double-cliquez sur le fichier .sln
-Ou ouvrez Visual Studio et sélectionnez "Ouvrir un projet"
-Configurez SFML :
-Les dépendances SFML sont incluses dans le projet
-Vérifiez que les chemins dans les propriétés du projet sont corrects
-Compilez le projet :
-Sélectionnez la configuration "Debug" ou "Release"
-Cliquez sur "Générer la solution" ou appuyez sur F7
+````bash
+git clone https://github.com/yanou16/ssp.git 
 
 ⚙️ Configuration
 Le jeu peut être configuré de plusieurs façons :
@@ -40,10 +30,9 @@ Le jeu peut être configuré de plusieurs façons :
 Modification de la taille de la grille dans le fichier principal
 Personnalisation de l'état initial via un fichier texte
 Ajustement de la vitesse de simulation en jeu
-
-
 Format du fichier d'état initial (initial_state.txt) :
 
+Code
 
 5 10  // Hauteur Largeur
 0 1 0 0 0 1 1 0 0 0
@@ -51,9 +40,6 @@ Format du fichier d'état initial (initial_state.txt) :
 1 1 1 0 0 0 0 0 0 0
 0 0 0 0 1 1 1 0 0 0
 0 0 0 0 0 0 0 0 0 0
-
-
-
 
 🎮 Utilisation
 Contrôles
@@ -111,7 +97,3 @@ Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
 🙏 Remerciements
 Merci à John Conway pour l'invention du Jeu de la Vie
 SFML pour la bibliothèque graphique
-
-![image](https://github.com/user-attachments/assets/84b15316-e3fe-44db-9d3f-7d8f752f5ca7)
-![image](https://github.com/user-attachments/assets/3bf718fa-fed3-40c3-ae9f-9b7da206e0ad)
-Modifier 
