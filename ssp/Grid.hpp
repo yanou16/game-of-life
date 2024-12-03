@@ -18,7 +18,8 @@ public:
     int getHeight() const { return height; }
     bool isStable() const;
     bool getCellUserCreated(int x, int y) const;  // Juste la déclaration, sans implémentation
-
+    int getLivingCellsCount() const;
+    int getUserCreatedCellsCount() const;
 private:
     int countNeighbors(int x, int y) const;
 };

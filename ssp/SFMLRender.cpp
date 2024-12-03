@@ -1,10 +1,30 @@
 #include "SFMLRender.hpp"
+#include <sstream>
 
 SFMLRender::SFMLRender(int width, int height)
-    : Render(),  // Appel du constructeur de la classe de base
-    window(sf::VideoMode(800, 600), "Game of Life - Press H for Help")
+    : Render(),
+    window(sf::VideoMode(800, 600), "Game of Life - Press H for Help"),
+    showInfo(false)
 {
     window.setFramerateLimit(60);
+
+    // Utiliser OpenSans du dossier font
+    std::string fontPath = "font/Open_Sans/OpenSans-VariableFont_wdth.wght";
+
+    if (!font.loadFromFile(fontPath)) {
+        std::cout << "ERREUR: Impossible de charger la police avec le chemin relatif: " << fontPath << std::endl;
+        // Essayer avec le chemin absolu
+        std::string absolutePath = "C:/Users/Lenovo/source/repos/ssp/ssp/font/Open_Sans/OpenSans-VariableFont_wdth.wght";
+        if (!font.loadFromFile(absolutePath)) {
+            std::cout << "ERREUR: Impossible de charger la police même avec le chemin absolu!" << std::endl;
+        }
+        else {
+            std::cout << "Police OpenSans chargée avec succès via chemin absolu!" << std::endl;
+        }
+    }
+    else {
+        std::cout << "Police OpenSans chargée avec succès!" << std::endl;
+    }
 
     float cellWidth = static_cast<float>(800) / width;
     float cellHeight = static_cast<float>(600) / height;
@@ -16,6 +36,56 @@ SFMLRender::SFMLRender(int width, int height)
         shape.setOutlineThickness(1);
         shape.setOutlineColor(sf::Color(50, 50, 50));
     }
+
+    initializeInfoButton();
+}
+
+void SFMLRender::initializeInfoButton() {
+    // Configurer le bouton
+    infoButton.setSize(sf::Vector2f(100, 30));
+    infoButton.setPosition(10, 10);
+    infoButton.setFillColor(sf::Color(80, 80, 200));
+    infoButton.setOutlineThickness(2);
+    infoButton.setOutlineColor(sf::Color::White);
+
+    // Configurer le texte du bouton avec une taille plus grande
+    infoButtonText.setFont(font);
+    infoButtonText.setString("Info");
+    infoButtonText.setCharacterSize(16);  // Taille réduite
+    infoButtonText.setFillColor(sf::Color::White);
+
+    // Centrer le texte dans le bouton
+    sf::FloatRect textBounds = infoButtonText.getLocalBounds();
+    float xPos = infoButton.getPosition().x + (infoButton.getSize().x - textBounds.width) / 2.0f;
+    float yPos = infoButton.getPosition().y + (infoButton.getSize().y - textBounds.height) / 2.0f - textBounds.top;
+    infoButtonText.setPosition(xPos, yPos);
+
+    // Configurer le texte d'information
+    infoText.setFont(font);
+    infoText.setCharacterSize(14);  // Taille réduite
+    infoText.setFillColor(sf::Color::White);
+    infoText.setPosition(10, 50);
+}
+
+
+void SFMLRender::updateInfoText(const Grid& grid) {
+    std::stringstream ss;
+
+    int livingCells = grid.getLivingCellsCount();
+    int userCells = grid.getUserCreatedCellsCount();
+
+
+    ss << "Cellules vivantes: " << grid.getLivingCellsCount() << "\n";
+    ss << "Cellules créées par l'utilisateur: " << grid.getUserCreatedCellsCount() << "\n";
+    infoText.setString(ss.str());
+
+    std::cout << "Mise à jour des infos - Vivantes: " << livingCells
+        << ", Utilisateur: " << userCells << std::endl;
+
+}
+
+bool SFMLRender::isMouseOverButton(const sf::Vector2i& mousePos) const {
+    return infoButton.getGlobalBounds().contains(mousePos.x, mousePos.y);
 }
 
 void SFMLRender::handleEvents(Grid* grid) {
@@ -27,7 +97,19 @@ void SFMLRender::handleEvents(Grid* grid) {
 
         if (!grid) return;
 
-        // Gestion de la souris
+        // Gestion du bouton Info
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (isMouseOverButton(mousePos)) {
+                    showInfo = !showInfo;
+                    std::cout << "Bouton Info " << (showInfo ? "activé" : "désactivé") << std::endl;
+                    return;  // Pour éviter d'activer une cellule sous le bouton
+                }
+            }
+        }
+
+        // Gestion de la souris pour les cellules
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
             auto mousePos = sf::Mouse::getPosition(window);
             auto gridPos = getGridCoordinates(mousePos.x, mousePos.y, *grid);
@@ -74,7 +156,7 @@ void SFMLRender::handleEvents(Grid* grid) {
                 if (grid) {
                     for (int y = 0; y < grid->getHeight(); y++) {
                         for (int x = 0; x < grid->getWidth(); x++) {
-                            grid->setCellState(x, y, rand() % 2 == 1, false);  // false car généré automatiquement
+                            grid->setCellState(x, y, rand() % 2 == 1, false);
                         }
                     }
                     std::cout << "Remplissage aléatoire" << std::endl;
@@ -163,10 +245,37 @@ sf::Vector2i SFMLRender::getGridCoordinates(int mouseX, int mouseY, const Grid& 
 
 void SFMLRender::render(const Grid& grid) {
     window.clear(sf::Color::Black);
+
+    // Dessiner les cellules
     updateCellShapes(grid);
     for (const auto& shape : cellShapes) {
         window.draw(shape);
     }
+
+    // Dessiner le bouton (même sans police)
+    window.draw(infoButton);
+
+    // Si la police est chargée, dessiner le texte du bouton
+    if (font.getInfo().family != "") {
+        window.draw(infoButtonText);
+    }
+
+    // Afficher les infos seulement si le bouton est activé
+    if (showInfo) {
+        // Créer un rectangle de fond pour le texte
+        sf::RectangleShape infoBg;
+        infoBg.setSize(sf::Vector2f(200, 60));
+        infoBg.setPosition(10, 50);
+        infoBg.setFillColor(sf::Color(0, 0, 0, 200));
+        infoBg.setOutlineThickness(1);
+        infoBg.setOutlineColor(sf::Color::White);
+        window.draw(infoBg);
+
+        // Même sans police, afficher au moins les statistiques dans la console
+        std::cout << "Cellules vivantes: " << grid.getLivingCellsCount()
+            << ", Créées par l'utilisateur: " << grid.getUserCreatedCellsCount() << std::endl;
+    }
+
     window.display();
 }
 
@@ -185,10 +294,10 @@ void SFMLRender::updateCellShapes(const Grid& grid) {
 
                 if (grid.getCellState(x, y)) {
                     if (grid.getCellUserCreated(x, y)) {
-                        cellShapes[index].setFillColor(sf::Color::Blue);  // Cellules utilisateur
+                        cellShapes[index].setFillColor(sf::Color::Blue);
                     }
                     else {
-                        cellShapes[index].setFillColor(sf::Color::Green); // Cellules automatiques
+                        cellShapes[index].setFillColor(sf::Color::Green);
                     }
                 }
                 else {

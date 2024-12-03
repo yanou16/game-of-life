@@ -73,3 +73,24 @@ bool Grid::getCellUserCreated(int x, int y) const {
     }
     return cells[y][x].isUserCreated();
 }
+
+
+int Grid::getLivingCellsCount() const {
+    int count = 0;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if (getCellState(x, y)) count++;
+        }
+    }
+    return count;
+}
+
+int Grid::getUserCreatedCellsCount() const {
+    int count = 0;
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if (getCellState(x, y) && getCellUserCreated(x, y)) count++;
+        }
+    }
+    return count;
+}

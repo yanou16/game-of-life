@@ -13,66 +13,55 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Fichiers de ressources\Fichiers d%27en-tête\services">
-      <UniqueIdentifier>{bb0b2088-a01a-4984-b1a7-4085df66ee26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers de ressources\Fichiers d%27en-tête\ihm">
-      <UniqueIdentifier>{7185a97c-c71e-4353-adc7-c34feed805f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\ihm">
-      <UniqueIdentifier>{d5646377-fba2-4334-85a3-481c0c00505d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\services">
-      <UniqueIdentifier>{df015db7-5b8e-4f7a-961c-8a1fbe643412}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers de ressources\Fichiers d%27en-tête\components">
+    <Filter Include="components">
       <UniqueIdentifier>{e0d503ef-44b9-46a5-86a5-2eb7b80d057a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\components">
-      <UniqueIdentifier>{8924a90d-8bbf-4b8d-9f22-df2063805afb}</UniqueIdentifier>
+    <Filter Include="ihm">
+      <UniqueIdentifier>{7185a97c-c71e-4353-adc7-c34feed805f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="services">
+      <UniqueIdentifier>{bb0b2088-a01a-4984-b1a7-4085df66ee26}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SFMLRender.cpp">
-      <Filter>Fichiers sources\ihm</Filter>
-    </ClCompile>
-    <ClCompile Include="Render.cpp">
-      <Filter>Fichiers sources\ihm</Filter>
+    <ClCompile Include="GameOfLife.cpp">
+      <Filter>services</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleRender.cpp">
-      <Filter>Fichiers sources\ihm</Filter>
+      <Filter>ihm</Filter>
     </ClCompile>
-    <ClCompile Include="GameOfLife.cpp">
-      <Filter>Fichiers sources\services</Filter>
+    <ClCompile Include="Render.cpp">
+      <Filter>ihm</Filter>
+    </ClCompile>
+    <ClCompile Include="SFMLRender.cpp">
+      <Filter>ihm</Filter>
     </ClCompile>
     <ClCompile Include="Cell.cpp">
-      <Filter>Fichiers sources\components</Filter>
+      <Filter>components</Filter>
     </ClCompile>
     <ClCompile Include="Grid.cpp">
-      <Filter>Fichiers sources\components</Filter>
+      <Filter>components</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameOfLife.hpp">
-      <Filter>Fichiers de ressources\Fichiers d%27en-tête\services</Filter>
+      <Filter>services</Filter>
     </ClInclude>
     <ClInclude Include="SFMLRender.hpp">
-      <Filter>Fichiers de ressources\Fichiers d%27en-tête\ihm</Filter>
+      <Filter>ihm</Filter>
     </ClInclude>
     <ClInclude Include="Render.hpp">
-      <Filter>Fichiers de ressources\Fichiers d%27en-tête\ihm</Filter>
+      <Filter>ihm</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleRender.hpp">
-      <Filter>Fichiers de ressources\Fichiers d%27en-tête\ihm</Filter>
+      <Filter>ihm</Filter>
     </ClInclude>
     <ClInclude Include="Grid.hpp">
-      <Filter>Fichiers de ressources\Fichiers d%27en-tête\components</Filter>
+      <Filter>components</Filter>
     </ClInclude>
     <ClInclude Include="Cell.hpp">
-      <Filter>Fichiers de ressources\Fichiers d%27en-tête\components</Filter>
+      <Filter>components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
