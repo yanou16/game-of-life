@@ -2,12 +2,19 @@
 #include <vector>
 #include "Cell.hpp"
 
+
+
 class Grid {
 private:
+
+    
+    
     std::vector<std::vector<Cell>> cells;
     std::vector<std::vector<Cell>> previousState;
     int width;
     int height;
+    
+
 
 public:
     Grid(int height, int width);
