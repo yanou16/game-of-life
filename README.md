@@ -1,38 +1,35 @@
-# Game of Life
+Game of Life
+Une implémentation du Jeu de la Vie de Conway en C++ avec SFML, offrant une interface graphique interactive, des formes prédéfinies et une gestion avancée des états des cellules.
 
-Une implémentation du Jeu de la Vie de Conway en C++ avec SFML, permettant une interaction utilisateur avancée et une distinction visuelle entre les cellules créées par l'utilisateur et celles générées automatiquement.
+📋 Table des matières
+Prérequis
+Installation
+Configuration
+Utilisation
+Fonctionnalités
+Structure du projet
+Contribution
+Licence
 
-## 📋 Table des matières
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Utilisation](#utilisation)
-- [Fonctionnalités](#fonctionnalités)
-- [Structure du projet](#structure-du-projet)
-- [Contribution](#contribution)
+🔧 Prérequis
+Windows 10 ou plus récent
+Visual Studio 2019 ou plus récent
+SFML 2.5.1 ou plus récent
+C++17 ou plus récent
 
-## 🔧 Prérequis
-
-- Windows 10 ou plus récent
-- Visual Studio 2019 ou plus récent
-- SFML 2.5.1 ou plus récent
-- C++17 ou plus récent
-
-## 💻 Installation
-
-1. Clonez le dépôt :
-````bash
-git clone https://github.com/yanou16/ssp.git 
+💻 Installation
+Clonez le dépôt :
+git clone https://github.com/yanou16/ssp.git
+Ouvrez le projet dans Visual Studio.
+Configurez les dépendances pour SFML.
+Compilez et lancez le projet.
 
 ⚙️ Configuration
 Le jeu peut être configuré de plusieurs façons :
-
-Modification de la taille de la grille dans le fichier principal
-Personnalisation de l'état initial via un fichier texte
-Ajustement de la vitesse de simulation en jeu
+Taille de la grille : modifiez les dimensions dans le fichier main.cpp.
+État initial : personnalisez le fichier initial_state.txt pour définir les cellules vivantes au démarrage.
+Vitesse de simulation : ajustez directement en jeu à l'aide des commandes clavier.
 Format du fichier d'état initial (initial_state.txt) :
-
-Code
 
 5 10  // Hauteur Largeur
 0 1 0 0 0 1 1 0 0 0
@@ -44,56 +41,65 @@ Code
 🎮 Utilisation
 Contrôles
 Souris :
-Clic gauche : Créer une cellule
-Clic droit : Supprimer une cellule
+Clic gauche : Créer une cellule.
+Clic droit : Supprimer une cellule.
 Clavier :
-Espace : Pause/Reprise
-+/- : Ajuster la vitesse
-C : Effacer la grille
-R : Remplissage aléatoire
-G : Placer un planeur
-B : Placer un bloc
-L : Placer un clignotant
-H : Afficher l'aide
-Code Couleur
-🟦 Bleu : Cellules créées par l'utilisateur
-🟩 Vert : Cellules générées automatiquement
-⬛ Noir : Cellules mortes
+Espace : Pause/Reprise de la simulation.
++/- : Ajuster la vitesse.
+C : Effacer toute la grille.
+R : Remplissage aléatoire de cellules.
+G : Placer un planeur.
+B : Placer un bloc.
+L : Placer un clignotant.
+H : Afficher l'aide en jeu.
+Code couleur :
+🟦 Bleu : Cellules créées par l'utilisateur.
+🟩 Vert : Cellules générées automatiquement.
+⬛ Noir : Cellules mortes.
+
 🌟 Fonctionnalités
-Interface graphique avec SFML
-Distinction visuelle des cellules selon leur origine
-Formes prédéfinies (planeur, bloc, clignotant)
-Chargement d'état initial depuis un fichier
-Contrôle de la vitesse de simulation
-Mode pause
-Grille redimensionnable
+Interface graphique : Utilisation de SFML pour un rendu visuel.
+Contrôles interactifs : Modification de la grille en temps réel.
+Formes prédéfinies : Ajout rapide de motifs comme planeur, bloc ou clignotant.
+Chargement d'état initial : Lecture d'un fichier texte pour la configuration initiale.
+Simulation dynamique : Contrôle de la vitesse et mise en pause.
+Grille redimensionnable : Ajustable via le code source.
+
 📁 Structure du projet
-Code
-CopyInsert
 ssp/
-├── src/
+├── components/
 │   ├── Cell.cpp        # Gestion des cellules individuelles
-│   ├── Grid.cpp        # Logique de la grille
-│   ├── GameOfLife.cpp  # Classe principale
-│   └── SFMLRender.cpp  # Rendu graphique
-├── include/
 │   ├── Cell.hpp
+│   ├── Grid.cpp        # Logique de la grille
 │   ├── Grid.hpp
+├── ihm/
+│   ├── ConsoleRender.cpp # Rendu texte (console)
+│   ├── ConsoleRender.hpp
+│   ├── SFMLRender.cpp    # Rendu graphique SFML
+│   ├── SFMLRender.hpp
+├── services/
+│   ├── GameOfLife.cpp    # Classe principale du jeu
 │   ├── GameOfLife.hpp
-│   └── SFMLRender.hpp
-└── resources/
-    └── initial_state.txt
+│   └── initial_state.txt # État initial de la grille
+├── tests/
+│   ├── Cell.cpp           # Tests unitaires pour Cell
+│   ├── Grid.cpp           # Tests unitaires pour Grid
+│   └── GameOfLifeTests1.cpp # Fichier principal des tests
+├── main.cpp              # Point d'entrée du programme
+
 🤝 Contribution
-Fork le projet
-Créez votre branche (git checkout -b feature/AmazingFeature)
-Committez vos changements (git commit -m 'Add some AmazingFeature')
-Push vers la branche (git push origin feature/AmazingFeature)
-Ouvrez une Pull Request
-📝 License
-Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
+Forkez le projet.
+Créez votre branche (git checkout -b feature/AmazingFeature).
+Commitez vos modifications (git commit -m 'Add some AmazingFeature').
+Pushez vers votre branche (git push origin feature/AmazingFeature).
+Ouvrez une Pull Request.
+
+📝 Licence
+Ce projet est sous licence MIT. Consultez le fichier LICENSE pour plus de détails.
 
 👥 Auteurs
-@yanou16
+@yanou16 @shenzhenyz
+
 🙏 Remerciements
 Merci à John Conway pour l'invention du Jeu de la Vie
 SFML pour la bibliothèque graphique
