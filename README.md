@@ -17,6 +17,68 @@ Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulair
 - SFML 2.5.1 ou plus récent
 - C++17 ou plus récent
 
+## 🎨 Fonctionnalités
+
+### Interface Graphique (SFML)
+- ✨ Grille interactive avec cellules colorées
+- 🖱️ Interaction souris pour activer/désactiver les cellules
+- ⌨️ Contrôles clavier complets
+- 📊 Affichage des statistiques en temps réel
+
+### Patterns Prédéfinis
+- 🛸 Planeur (Glider)
+- ⬛ Bloc (Block)
+- 💫 Clignotant (Blinker)
+
+### Contrôles Détaillés
+| Touche | Action |
+|--------|--------|
+| Espace | Pause/Reprise |
+| +/- | Ajuster la vitesse |
+| C | Effacer la grille |
+| R | Remplissage aléatoire |
+| G | Placer un planeur |
+| B | Placer un bloc |
+| L | Placer un clignotant |
+
+### Fonctionnalités Avancées
+- 🎨 Différenciation visuelle des cellules (utilisateur/automatique)
+- ⚡ Contrôle de la vitesse de simulation
+- 💾 Sauvegarde/Chargement d'états
+- 📊 Statistiques en temps réel
+
+## 🏗️ Architecture Technique
+
+### Structure du Projet
+
+### Classes Principales
+#### 🎮 GameOfLife
+- Gestion du jeu
+- Contrôle de la simulation
+- Interface avec les renderers
+
+#### 📐 Grid
+- Implémentation des règles
+- Gestion des états des cellules
+- Calcul des générations
+
+#### 🖼️ Render (Interface)
+- `SFMLRender`: Rendu graphique
+- `ConsoleRender`: Rendu texte
+
+## 🧪 Tests
+
+### Test Unitaire Principal
+```cpp
+TEST_METHOD(TestGridValidityAtIterationT)
+```
+
+Aspects Testés
+✅ Validité de la grille à l'itération t
+✅ Comportement des patterns
+✅ Règles de transition
+✅ Gestion des limites
+
 ## 💻 Installation
 1. Clonez le dépôt :
    ```bash
