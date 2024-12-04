@@ -77,7 +77,7 @@ Le jeu peut être configuré de plusieurs façons :
 
 ## 📁 Structure du projet
 
-
+```
 ssp/
 ├── components/
 │   ├── Cell.cpp        # Gestion des cellules individuelles
@@ -98,7 +98,7 @@ ssp/
 │   ├── Grid.cpp           # Tests unitaires pour Grid
 │   └── GameOfLifeTests1.cpp # Fichier principal des tests
 ├── main.cpp              # Point d'entrée du programme
-
+```
 
 ## 🤝 Contribution
 
@@ -113,5 +113,4 @@ ssp/
 Ce projet est sous licence MIT. Consultez le fichier `LICENSE` pour plus de détails.
 
 ## 👥 Auteurs
-@shenzhenyz @yannou16
-
+Les auteurs de ce guide et les reponsables du projet: @shenzhenyz @yannou16
