@@ -112,3 +112,6 @@ ssp/
 
 Ce projet est sous licence MIT. Consultez le fichier `LICENSE` pour plus de détails.
 
+## 👥 Auteurs
+@shenzhenyz @yannou16
+
