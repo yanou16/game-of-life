@@ -1,168 +1,15 @@
-
-
-
-# 🎮 Jeu de la Vie (Game of Life)
-> Une implémentation avancée de l'automate cellulaire de Conway en C++
-
+# Game of Life
+Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulaires, implémentée en C++ avec SFML pour une interface interactive et intuitive. Cette version permet une personnalisation avancée, une interaction en temps réel et une distinction visuelle entre les cellules créées par l'utilisateur et celles générées automatiquement grâce aux extensions de notre projet.
 
 ## 📋 Table des matières
 - [Prérequis](#prérequis)
 - [Installation](#installation)
-1. [Vue d'ensemble](#vue-densemble)
-2. [Fonctionnalités](#fonctionnalités)
-3. [Architecture Technique](#architecture-technique)
-4. [Tests](#tests)
-5. - [Structure du projet](#structure-du-projet)
-6. [Installation](#installation)
-7. [Guide d'Utilisation](#guide-dutilisation)
-8. [Développement](#développement)
-
-## 🌟 Vue d'ensemble
-Ce projet est une implémentation du Jeu de la Vie de Conway avec deux modes de rendu :
-- Interface graphique avec SFML
-- Mode console pour une utilisation sans interface graphique
-
-### 🎯 Objectifs du Projet
-- Implémenter les règles classiques du Jeu de la Vie
-- Fournir une interface utilisateur interactive
-- Assurer la qualité du code via des tests unitaires
-- Permettre la sauvegarde et le chargement d'états
-
-## 🎨 Fonctionnalités
-
-### Interface Graphique (SFML)
-- ✨ Grille interactive avec cellules colorées
-- 🖱️ Interaction souris pour activer/désactiver les cellules
-- ⌨️ Contrôles clavier complets
-- 📊 Affichage des statistiques en temps réel
-
-### Patterns Prédéfinis
-- 🛸 Planeur (Glider)
-- ⬛ Bloc (Block)
-- 💫 Clignotant (Blinker)
-
-### Contrôles Détaillés
-| Touche | Action |
-|--------|--------|
-| Espace | Pause/Reprise |
-| +/- | Ajuster la vitesse |
-| C | Effacer la grille |
-| R | Remplissage aléatoire |
-| G | Placer un planeur |
-| B | Placer un bloc |
-| L | Placer un clignotant |
-
-### Fonctionnalités Avancées
-- 🎨 Différenciation visuelle des cellules (utilisateur/automatique)
-- ⚡ Contrôle de la vitesse de simulation
-- 💾 Sauvegarde/Chargement d'états
-- 📊 Statistiques en temps réel
-
-## 🏗️ Architecture Technique
-
-### Structure du Projet
-
-
-
-### Classes Principales
-#### 🎮 GameOfLife
-- Gestion du jeu
-- Contrôle de la simulation
-- Interface avec les renderers
-
-#### 📐 Grid
-- Implémentation des règles
-- Gestion des états des cellules
-- Calcul des générations
-
-#### 🖼️ Render (Interface)
-- `SFMLRender`: Rendu graphique
-- `ConsoleRender`: Rendu texte
-
-## 🧪 Tests
-
-### Test Unitaire Principal
-```cpp
-TEST_METHOD(TestGridValidityAtIterationT)
-```
-
-Aspects Testés
-✅ Validité de la grille à l'itération t
-✅ Comportement des patterns
-✅ Règles de transition
-✅ Gestion des limites
-💻 Installation
-Prérequis
-Visual Studio 2022
-SFML 2.6.1
-C++17 ou supérieur
-{
-    // Test sur grille 5x10
-    Grid grid(10, 5);
-    
-    // Configuration et vérification du blinker
-    // Validation à t=0 et t=1
-}
-
-Aspects Testés
-✅ Validité de la grille à l'itération t
-✅ Comportement des patterns
-✅ Règles de transition
-✅ Gestion des limites
-💻 Installation
-Prérequis
-Visual Studio 2022
-SFML 2.6.1
-C++17 ou supérieur
-
-Étapes d'Installation
-Cloner le repository
-git clone [url-du-repo]
-cd ssp
-
-Configuration SFML
-Inclure les headers SFML
-Lier les bibliothèques
-Copier les DLLs
-📖 Guide d'Utilisation
-Mode Graphique
-Lancer l'application
-Utiliser la souris pour placer les cellules
-Espace pour démarrer/pauser
-Touches G/B/L pour les patterns
-Mode Console
-Lancer en mode console
-Suivre les instructions à l'écran
-Utiliser les commandes du menu
-🛠️ Développement
-Branches
-master: Version stable
-ol2: Développement actif
-Contributions Récentes
-✨ Refactoring architecture
-🧪 Ajout tests unitaires
-🎨 Amélioration interface
-🐛 Corrections bugs
-Standards de Code
-Style C++ moderne
-Principes SOLID
-Documentation complète
-
-
-📝 Notes
-Projet en développement actif
-Tests unitaires en expansion
-Optimisations prévues
-
-
-
-
-
-
-
-
-
-
+- [Configuration](#configuration)
+- [Utilisation](#utilisation)
+- [Fonctionnalités](#fonctionnalités)
+- [Structure du projet](#structure-du-projet)
+- [Contribution](#contribution)
+- [Licence](#licence)
 
 ## 🔧 Prérequis
 
@@ -233,7 +80,7 @@ Le jeu peut être configuré de plusieurs façons :
 
 ## 📁 Structure du projet
 
-```
+
 ssp/
 ├── components/
 │   ├── Cell.cpp        # Gestion des cellules individuelles
@@ -254,7 +101,7 @@ ssp/
 │   ├── Grid.cpp           # Tests unitaires pour Grid
 │   └── GameOfLifeTests1.cpp # Fichier principal des tests
 ├── main.cpp              # Point d'entrée du programme
-```
+
 
 ## 🤝 Contribution
 
@@ -267,3 +114,7 @@ ssp/
 ## 📝 Licence
 
 Ce projet est sous licence MIT. Consultez le fichier `LICENSE` pour plus de détails.
+
+---
+
+Cette version inclut la mention de la structure de dossier pour les tests unitaires. 😊
