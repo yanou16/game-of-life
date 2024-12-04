@@ -1,5 +1,5 @@
 # Game of Life
-Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulaires, implémentée en C++ avec SFML pour une interface interactive et intuitive. Cette version permet une personnalisation avancée, une interaction en temps réel et une distinction visuelle entre les cellules créées par l'utilisateur et celles générées automatiquement grâce aux extensions de notre projet.
+Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulaires, implémentée en C++ avec SFML pour une interface interactive et intuitive. Cette version permet une personnalisation avancée, une interaction en temps réel et une distinction visuelle entre les cellules créées par l'utilisateur et celles générées automatiquement grâce aux extensions de notre projet: Game of Life.
 
 ## 📋 Table des matières
 - [Prérequis](#prérequis)
@@ -12,14 +12,12 @@ Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulair
 - [Licence](#licence)
 
 ## 🔧 Prérequis
-
 - Windows 10 ou plus récent
 - Visual Studio 2019 ou plus récent
 - SFML 2.5.1 ou plus récent
 - C++17 ou plus récent
 
 ## 💻 Installation
-
 1. Clonez le dépôt :
    ```bash
    git clone https://github.com/yanou16/ssp.git
@@ -29,7 +27,6 @@ Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulair
 4. Compilez et lancez le projet.
 
 ## ⚙️ Configuration
-
 Le jeu peut être configuré de plusieurs façons :
 
 - **Taille de la grille** : modifiez les dimensions dans le fichier `main.cpp`.
@@ -115,6 +112,3 @@ ssp/
 
 Ce projet est sous licence MIT. Consultez le fichier `LICENSE` pour plus de détails.
 
----
-
-Cette version inclut la mention de la structure de dossier pour les tests unitaires. 😊
