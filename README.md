@@ -1,6 +1,6 @@
 # Game of Life
 
-Le Jeu de la Vie de Conway est une simulation fascinante basée sur des automates cellulaires, où des cellules sur une grille évoluent au fil du temps selon des règles simples. Ce projet propose une implémentation complète de ce concept en C++ en s'appuyant sur la bibliothèque graphique SFML pour offrir une interface interactive et visuellement attrayante.
+Le **Jeu de la Vie de Conway** est une simulation basée sur des automates cellulaires, implémentée en C++ avec **SFML** pour une interface interactive et intuitive. Cette version permet une personnalisation avancée, une interaction en temps réel et une distinction visuelle entre les cellules créées par l'utilisateur et celles générées automatiquement.
 
 ## 📋 Table des matières
 - [Prérequis](#prérequis)
