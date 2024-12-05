@@ -154,7 +154,7 @@ void SFMLRender::handleEvents(Grid* grid) {
                     std::cout << "Vitesse ralentie à: " << getSimulationSpeed() << "ms" << std::endl;
                     break;
 
-                case sf::Keyboard::Space:
+                case sf::Keyboard::A:
                     isPaused = !isPaused;
                     std::cout << "Simulation " << (isPaused ? "en pause" : "reprise")
                         << " (Vitesse actuelle: " << getSimulationSpeed() << "ms)" << std::endl;
