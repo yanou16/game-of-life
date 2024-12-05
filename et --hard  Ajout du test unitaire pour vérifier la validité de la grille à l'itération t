@@ -1,0 +1,64 @@
+[33mcommit 46ee5245b8cf3d547a893539b012bc7bb41bb38c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mol2[m[33m, [m[1;31morigin/ol2[m[33m)[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Tue Dec 3 23:19:48 2024 +0100
+
+    Ajout du test unitaire pour vérifier la validité de la grille à l'itération t
+
+[33mcommit e8aa94e363069cb236098b33adce7d65a76a119a[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Tue Dec 3 12:48:21 2024 +0100
+
+    Réorganisation de la structure des dossiers
+
+[33mcommit 5e8f9b0e92f01b53de61e310c3bc59f23398a155[m[33m ([m[1;31morigin/ol[m[33m, [m[1;32mol[m[33m)[m
+Merge: 3f4e7df 69bb2ab
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Sun Dec 1 21:39:19 2024 +0100
+
+    Réorganisation du projet et améliorations visuelles
+    
+    - Restructuration des dossiers (components/services/ihm)
+    - Mise à jour de la structure Visual Studio
+    - Configuration des chemins d'inclusion
+
+[33mcommit 3f4e7df8176e3ac3051e051d3258022897966250[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Sun Dec 1 20:56:54 2024 +0100
+
+    Mise à jour de la structure du projet :
+
+[33mcommit 69bb2ab5b10395653218d11a7cbe2132de6b1dba[m
+Author: yanou16 <rayanelouzazna13@gmail.com>
+Date:   Sat Nov 30 16:37:52 2024 +0100
+
+    Create README.md
+
+[33mcommit 0a41f3942db9238529f272edbf738daf75adf86c[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Sat Nov 30 16:31:10 2024 +0100
+
+    Ajout de la différenciation entre cellules créées par l'utilisateur (bleues) et cellules automatiques (vertes)
+
+[33mcommit 205022bc8c6b5e787b6e4a9710efd512b73a4256[m[33m ([m[1;31morigin/liskov_prblm_fix[m[33m, [m[1;32mliskov_prblm_fix[m[33m)[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Fri Nov 29 13:59:25 2024 +0100
+
+    Refactoring: Application du principe de Liskov sur les classes Render
+
+[33mcommit 4eb2c2c441702b26173816b66e3521abc1fe1de6[m[33m ([m[1;32mmaster[m[33m)[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Thu Nov 28 16:19:08 2024 +0100
+
+    Mise à jour: [reste que prblm de la vitesse du jeu]
+
+[33mcommit e77374fba5165e4aab66b5d16c0c27e7908dd7c8[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Thu Nov 28 11:56:38 2024 +0100
+
+    Ajoutez des fichiers projet.
+
+[33mcommit 55db1b90f95efaab90c50e3497b4ec30f31f3d2a[m
+Author: yanou16 <rayanelouzazna@gmail.com>
+Date:   Thu Nov 28 11:44:36 2024 +0100
+
+    Ajouter .gitattributes et .gitignore

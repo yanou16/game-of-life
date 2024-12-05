@@ -4,7 +4,9 @@
 SFMLRender::SFMLRender(int width, int height)
     : Render(),
     window(sf::VideoMode(800, 600), "Game of Life - Press H for Help"),
-    showInfo(false)
+    showInfo(false),
+    isPaused(false),
+    simulationSpeed(50.0f)
 {
     window.setFramerateLimit(60);
 
@@ -74,14 +76,17 @@ void SFMLRender::updateInfoText(const Grid& grid) {
     int livingCells = grid.getLivingCellsCount();
     int userCells = grid.getUserCreatedCellsCount();
 
-
     ss << "Cellules vivantes: " << grid.getLivingCellsCount() << "\n";
     ss << "Cellules créées par l'utilisateur: " << grid.getUserCreatedCellsCount() << "\n";
+    ss << "État: " << (isPaused ? "En pause" : "En cours") << "\n";  // Ajout de l'état de pause
+    ss << "Vitesse: " << simulationSpeed << "ms" << "\n";
     infoText.setString(ss.str());
 
     std::cout << "Mise à jour des infos - Vivantes: " << livingCells
-        << ", Utilisateur: " << userCells << std::endl;
-
+        << ", Utilisateur: " << userCells
+        << ", État: " << (isPaused ? "En pause" : "En cours") << std::endl
+    // Ajout dans la console
+    << ", Vitesse: " << simulationSpeed << "ms" << std::endl;
 }
 
 bool SFMLRender::isMouseOverButton(const sf::Vector2i& mousePos) const {
@@ -89,121 +94,87 @@ bool SFMLRender::isMouseOverButton(const sf::Vector2i& mousePos) const {
 }
 
 void SFMLRender::handleEvents(Grid* grid) {
+    if (!window.isOpen() || grid == nullptr) return;
+
     sf::Event event;
     while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
+        switch (event.type) {
+        case sf::Event::Closed:
             window.close();
-        }
+            break;
 
-        if (!grid) return;
-
-        // Gestion du bouton Info
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                if (isMouseOverButton(mousePos)) {
-                    showInfo = !showInfo;
-                    std::cout << "Bouton Info " << (showInfo ? "activé" : "désactivé") << std::endl;
-                    return;  // Pour éviter d'activer une cellule sous le bouton
+        case sf::Event::MouseButtonPressed:
+            mousePosition = sf::Mouse::getPosition(window);
+            if (isMouseOverButton(mousePosition)) {
+                showInfo = !showInfo;
+            }
+            else {
+                // Clic gauche pour activer/désactiver les cellules
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2i gridPos = getGridCoordinates(mousePosition.x, mousePosition.y, *grid);
+                    if (gridPos.x >= 0 && gridPos.x < grid->getWidth() &&
+                        gridPos.y >= 0 && gridPos.y < grid->getHeight()) {
+                        grid->setCellState(gridPos.x, gridPos.y, !grid->getCellState(gridPos.x, gridPos.y));
+                    }
                 }
             }
-        }
+            break;
 
-        // Gestion de la souris pour les cellules
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-            auto mousePos = sf::Mouse::getPosition(window);
-            auto gridPos = getGridCoordinates(mousePos.x, mousePos.y, *grid);
+        case sf::Event::KeyPressed:
+            // Vérifier que la fenêtre a le focus
+            if (window.hasFocus()) {
+                sf::Vector2i gridPos = getGridCoordinates(mousePosition.x, mousePosition.y, *grid);
 
-            if (gridPos.x >= 0 && gridPos.x < grid->getWidth() &&
-                gridPos.y >= 0 && gridPos.y < grid->getHeight()) {
-                grid->setCellState(gridPos.x, gridPos.y,
-                    sf::Mouse::isButtonPressed(sf::Mouse::Left),
-                    true);  // true pour indiquer que c'est créé par l'utilisateur
-            }
-        }
-
-        if (event.type == sf::Event::KeyPressed) {
-            switch (event.key.code) {
-            case sf::Keyboard::Space:
-                isPaused = !isPaused;
-                std::cout << (isPaused ? "Pause" : "Reprise") << std::endl;
-                break;
-
-            case sf::Keyboard::Add:
-            case sf::Keyboard::Equal:
-                setSimulationSpeed(std::max(50.0f, getSimulationSpeed() - 50.0f));
-                std::cout << "Vitesse: " << getSimulationSpeed() << "ms" << std::endl;
-                break;
-
-            case sf::Keyboard::Subtract:
-            case sf::Keyboard::Dash:
-                setSimulationSpeed(std::min(1000.0f, getSimulationSpeed() + 50.0f));
-                std::cout << "Vitesse: " << getSimulationSpeed() << "ms" << std::endl;
-                break;
-
-            case sf::Keyboard::C:
-                if (grid) {
-                    for (int y = 0; y < grid->getHeight(); y++) {
-                        for (int x = 0; x < grid->getWidth(); x++) {
-                            grid->setCellState(x, y, false, false);
-                        }
-                    }
-                    std::cout << "Grille effacée" << std::endl;
-                }
-                break;
-
-            case sf::Keyboard::R:
-                if (grid) {
-                    for (int y = 0; y < grid->getHeight(); y++) {
-                        for (int x = 0; x < grid->getWidth(); x++) {
-                            grid->setCellState(x, y, rand() % 2 == 1, false);
-                        }
-                    }
-                    std::cout << "Remplissage aléatoire" << std::endl;
-                }
-                break;
-
-            case sf::Keyboard::G:
-                if (grid) {
-                    auto mousePos = sf::Mouse::getPosition(window);
-                    auto gridPos = getGridCoordinates(mousePos.x, mousePos.y, *grid);
+                switch (event.key.code) {
+                case sf::Keyboard::G:
                     placeGlider(*grid, gridPos.x, gridPos.y);
-                }
-                break;
+                    break;
 
-            case sf::Keyboard::B:
-                if (grid) {
-                    auto mousePos = sf::Mouse::getPosition(window);
-                    auto gridPos = getGridCoordinates(mousePos.x, mousePos.y, *grid);
+                case sf::Keyboard::B:
                     placeBlock(*grid, gridPos.x, gridPos.y);
-                }
-                break;
+                    break;
 
-            case sf::Keyboard::L:
-                if (grid) {
-                    auto mousePos = sf::Mouse::getPosition(window);
-                    auto gridPos = getGridCoordinates(mousePos.x, mousePos.y, *grid);
+                case sf::Keyboard::N:
                     placeBlinker(*grid, gridPos.x, gridPos.y);
+                    break;
+
+                case sf::Keyboard::Up:
+                {
+                    float newSpeed = std::min(MAX_SPEED, simulationSpeed + 100.0f);
+                    if (newSpeed != simulationSpeed) {
+                        simulationSpeed = newSpeed;
+                        std::cout << "Vitesse ralentie à: " << simulationSpeed << "ms" << std::endl;
+                    }
                 }
                 break;
 
-            case sf::Keyboard::H:
-                std::cout << "\nControls:\n"
-                    << "Clic gauche - Activer une cellule\n"
-                    << "Clic droit - Désactiver une cellule\n"
-                    << "Espace - Pause/Reprise\n"
-                    << "+/- - Ajuster la vitesse\n"
-                    << "C - Effacer la grille\n"
-                    << "R - Remplissage aléatoire\n"
-                    << "G - Placer un planeur\n"
-                    << "B - Placer un bloc\n"
-                    << "L - Placer un clignotant\n"
-                    << "H - Afficher l'aide\n"
-                    << "Échap - Quitter\n";
+                case sf::Keyboard::Down:
+                {
+                    float newSpeed = std::max(MIN_SPEED, simulationSpeed - 100.0f);
+                    if (newSpeed != simulationSpeed) {
+                        simulationSpeed = newSpeed;
+                        std::cout << "Vitesse accélérée à: " << simulationSpeed << "ms" << std::endl;
+                    }
+                }
                 break;
+
+                case sf::Keyboard::Space:
+                    isPaused = !isPaused;
+                    std::cout << "Simulation " << (isPaused ? "en pause" : "reprise")
+                        << " (Vitesse actuelle: " << simulationSpeed << "ms)" << std::endl;
+                    break;
+
+                case sf::Keyboard::Escape:
+                    window.close();
+                    break;
+                }
             }
+            break;
         }
     }
+
+    // Mettre à jour la position de la souris même sans événement
+    mousePosition = sf::Mouse::getPosition(window);
 }
 
 void SFMLRender::placeGlider(Grid& grid, int x, int y) {
@@ -310,4 +281,13 @@ void SFMLRender::updateCellShapes(const Grid& grid) {
 
 bool SFMLRender::isOpen() const {
     return window.isOpen();
+}
+
+
+bool SFMLRender::isPauseActive() const {
+    return isPaused;
+}
+
+float SFMLRender::getSimulationSpeed() const {
+    return simulationSpeed;
 }

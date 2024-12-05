@@ -1,0 +1,120 @@
+@startuml
+
+hide footbox
+hide circle
+
+top to bottom direction
+
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+    AttributeIconSize 0
+}
+
+together {
+    class Cell {
+        -bool alive
+        -int x
+        -int y
+        +Cell()
+        +getCellState() bool
+        +setState(bool state)
+        +getX() int
+        +getY() int
+        +setPosition(int x, int y)
+    }
+
+    class Grid {
+        -vector<vector<Cell>> cells
+        -int width
+        -int height
+        +Grid(int width, int height)
+        +getCellState(int x, int y) bool
+        +setCellState(int x, int y, bool state)
+        +getWidth() int
+        +getHeight() int
+        +updateGrid()
+        -countNeighbors(int x, int y) int
+    }
+}
+
+together {
+    class GameOfLife {
+        -Grid grid
+        -Render* renderer
+        -bool isStarted
+        +GameOfLife(int width, int height, Render* renderer)
+        +run()
+        +update()
+        +render()
+        +isRunning() bool
+    }
+
+    class FileService {
+        +{static} saveToFile(const Grid& grid, const string& filename)
+        +{static} loadFromFile(Grid& grid, const string& filename)
+        +{static} saveGenerationState(const Grid& grid, int generation)
+        +{static} createOutputDirectory()
+        +{static} saveIteration(const Grid& grid, int iteration)
+        -{static} ensureDirectoryExists(const string& path)
+    }
+}
+
+together {
+    abstract class Render {
+        +render(const Grid& grid)
+        +isOpen() const bool
+        +handleEvents()
+        +~Render()
+    }
+
+    class ConsoleRender {
+        -string outputDir
+        -int iterationCount
+        +ConsoleRender(string baseFilename)
+        +render(const Grid& grid)
+        +isOpen() const bool
+        +handleEvents()
+    }
+
+    class SFMLRender {
+        -RenderWindow window
+        -vector<RectangleShape> cellShapes
+        -float cellSize
+        -Vector2i mousePosition
+        -bool isPaused
+        -float simulationSpeed
+        +SFMLRender(int width, int height)
+        +render(const Grid& grid)
+        +isOpen() const bool
+        +handleEvents(Grid& grid)
+        +setSimulationSpeed(float speed)
+        +getSimulationSpeed() float
+        +isPauseActive() bool
+        -updateCellShapes(const Grid& grid)
+        -getGridCoordinates(int mouseX, int mouseY) Vector2i
+        -placeGlider(Grid& grid, int x, int y)
+        -placeBlock(Grid& grid, int x, int y)
+        -placeBlinker(Grid& grid, int x, int y)
+    }
+}
+
+Grid *-- Cell : contient
+GameOfLife o-- Grid : agrégation
+GameOfLife o-- Render : agrégation
+Render <|-- ConsoleRender : hérite de
+Render <|-- SFMLRender : hérite de
+GameOfLife ..> FileService : utilise
+ConsoleRender ..> FileService : utilise
+
+Cell -[hidden]right- Grid
+GameOfLife -[hidden]right- FileService
+Render -[hidden]right- ConsoleRender
+ConsoleRender -[hidden]right- SFMLRender
+
+Cell -[hidden]down- GameOfLife
+Grid -[hidden]down- GameOfLife
+GameOfLife -[hidden]down- Render
+
+@enduml

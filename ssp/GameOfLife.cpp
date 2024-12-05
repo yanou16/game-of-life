@@ -7,14 +7,13 @@
 #include <filesystem>
 
 GameOfLife::GameOfLife(const std::string& filename, GameMode mode)
-    : grid(20, 20),  // Initialisation explicite avec une taille par défaut
+    : grid(20, 20),
     simulationSpeed(100),
     generationCount(0),
-    maxGenerations(100) {
-
+    maxGenerations(100)
+{
     if (mode == GameMode::CONSOLE) {
-        outputDir = filename + "_out";
-        std::filesystem::create_directory(outputDir);
+        outputDir = FileService::createOutputDirectory(filename);
     }
 
     initializeFromFile(filename);
@@ -29,54 +28,22 @@ GameOfLife::GameOfLife(const std::string& filename, GameMode mode)
 }
 
 void GameOfLife::initializeFromFile(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        initializeDefaultGrid();
-        return;
+    try {
+        FileService::loadFromFile(filename, grid);
     }
-
-    int height, width;
-    file >> height >> width;
-    height = std::min(std::max(height, 5), 50);
-    width = std::min(std::max(width, 5), 50);
-
-    grid = Grid(height, width);
-
-    int state;
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            if (file >> state) {
-                grid.setCellState(x, y, state == 1);
-            }
-        }
+    catch (const std::exception&) {
+        initializeDefaultGrid();
     }
 }
+
+ 
 
 void GameOfLife::initializeDefaultGrid() {
     grid = Grid(20, 20);
     placeGlider(10, 10);  // Place un planeur au centre
 }
 
-void GameOfLife::saveToFile(int generation) {
-    if (outputDir.empty()) return;
 
-    std::string filename = outputDir + "/generation_" + std::to_string(generation) + ".txt";
-    std::ofstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Impossible d'ouvrir le fichier pour la sauvegarde: " << filename << std::endl;
-        return;
-    }
-
-    file << grid.getHeight() << " " << grid.getWidth() << std::endl;
-
-    for (int y = 0; y < grid.getHeight(); y++) {
-        for (int x = 0; x < grid.getWidth(); x++) {
-            file << (grid.getCellState(x, y) ? "1" : "0");
-            if (x < grid.getWidth() - 1) file << " ";
-        }
-        file << std::endl;
-    }
-}
 
 void GameOfLife::placeGlider(int x, int y) {
     if (x >= 0 && x + 2 < grid.getWidth() && y >= 0 && y + 2 < grid.getHeight()) {
@@ -154,7 +121,7 @@ void GameOfLife::updateSimulation() {
     generationCount++;
 
     if (!outputDir.empty()) {
-        saveToFile(generationCount);
+        FileService::saveGenerationState(outputDir, generationCount, grid);
     }
 }
 
@@ -167,43 +134,55 @@ void GameOfLife::setSimulationSpeed(int speed) {
 
 void GameOfLife::run() {
     if (auto* sfmlRenderer = dynamic_cast<SFMLRender*>(renderer.get())) {
+        // Mode graphique
         while (sfmlRenderer->isOpen() && generationCount < maxGenerations) {
             sfmlRenderer->handleEvents(&grid);
-            sfmlRenderer->render(grid);
+
+            // Obtenir la vitesse actuelle avant de mettre à jour
+            float currentSpeed = sfmlRenderer->getSimulationSpeed();
 
             // Mettre à jour seulement si pas en pause
             if (!sfmlRenderer->isPauseActive()) {
+                // Appliquer le délai AVANT la mise à jour
+                sf::sleep(sf::milliseconds(static_cast<int>(currentSpeed)));
+
                 updateSimulation();
                 if (grid.isStable() && generationCount > 0) {
+                    std::cout << "Configuration stable détectée!" << std::endl;
                     break;
                 }
 
                 if (generationCount % 10 == 0) {
-                    std::cout << "Generation: " << generationCount << std::endl;
+                    std::cout << "Generation: " << generationCount
+                        << " (Vitesse: " << currentSpeed << "ms)" << std::endl;
                 }
-
-                sf::sleep(sf::milliseconds(static_cast<int>(sfmlRenderer->getSimulationSpeed())));
             }
+
+            sfmlRenderer->render(grid);
         }
     }
     else {
         // Mode console
         while (renderer->isOpen() && generationCount < maxGenerations) {
             renderer->handleEvents();
-            renderer->render(grid);
 
-            updateSimulation();
+            // D'abord vérifier si on est stable
             if (grid.isStable() && generationCount > 0) {
-                break;
+                renderer->render(grid);  // Dernier affichage
+                break;                   // Sort de la boucle
             }
 
-            if (generationCount % 10 == 0) {
-                std::cout << "Generation: " << generationCount << std::endl;
-            }
+            renderer->render(grid);      // Affichage normal
+            updateSimulation();          // Met à jour la grille
 
+            // Utiliser la vitesse de simulation du mode console
             std::this_thread::sleep_for(std::chrono::milliseconds(simulationSpeed));
         }
     }
 
     std::cout << "\nSimulation terminée après " << generationCount << " générations.\n";
+    if (grid.isStable()) {
+        std::cout << "État final: Configuration stable\n";
+    }
 }
+    

@@ -5,7 +5,7 @@
 #include "SFMLRender.hpp"
 #include <memory>
 #include <string>
-
+#include "FileService.hpp"
 enum class GameMode {
     CONSOLE,
     GRAPHICAL
@@ -29,11 +29,12 @@ private:
     int maxGenerations;
     std::string outputDir;
     int generationCount;
+    
 
     // Méthodes privées pour la logique métier
     void initializeFromFile(const std::string& filename);
     void initializeDefaultGrid();
-    void saveToFile(int generation);
+    
     void placeGlider(int x, int y);
     void placeBlock(int x, int y);
     void placeBlinker(int x, int y);

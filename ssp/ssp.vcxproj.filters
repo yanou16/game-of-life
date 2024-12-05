@@ -43,6 +43,9 @@
       <Filter>components</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="FileService.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameOfLife.hpp">
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="Cell.hpp">
       <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="FileService.hpp">
+      <Filter>Fichiers de ressources\Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
