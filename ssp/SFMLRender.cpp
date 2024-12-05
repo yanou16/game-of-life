@@ -109,12 +109,16 @@ void SFMLRender::handleEvents(Grid* grid) {
                 showInfo = !showInfo;
             }
             else {
-                // Clic gauche pour activer/désactiver les cellules
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    sf::Vector2i gridPos = getGridCoordinates(mousePosition.x, mousePosition.y, *grid);
-                    if (gridPos.x >= 0 && gridPos.x < grid->getWidth() &&
-                        gridPos.y >= 0 && gridPos.y < grid->getHeight()) {
-                        grid->setCellState(gridPos.x, gridPos.y, !grid->getCellState(gridPos.x, gridPos.y));
+                sf::Vector2i gridPos = getGridCoordinates(mousePosition.x, mousePosition.y, *grid);
+                if (gridPos.x >= 0 && gridPos.x < grid->getWidth() &&
+                    gridPos.y >= 0 && gridPos.y < grid->getHeight()) {
+                    // Clic gauche pour activer
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        grid->setCellState(gridPos.x, gridPos.y, true, true);
+                    }
+                    // Clic droit pour désactiver
+                    else if (event.mouseButton.button == sf::Mouse::Right) {
+                        grid->setCellState(gridPos.x, gridPos.y, false);
                     }
                 }
             }
@@ -134,34 +138,59 @@ void SFMLRender::handleEvents(Grid* grid) {
                     placeBlock(*grid, gridPos.x, gridPos.y);
                     break;
 
-                case sf::Keyboard::N:
+                case sf::Keyboard::L:  // Changé de N à L pour cohérence
                     placeBlinker(*grid, gridPos.x, gridPos.y);
                     break;
 
-                case sf::Keyboard::Up:
-                {
-                    float newSpeed = std::min(MAX_SPEED, simulationSpeed + 100.0f);
-                    if (newSpeed != simulationSpeed) {
-                        simulationSpeed = newSpeed;
-                        std::cout << "Vitesse ralentie à: " << simulationSpeed << "ms" << std::endl;
-                    }
-                }
-                break;
+                case sf::Keyboard::Add:
+                case sf::Keyboard::Equal:    // Pour le + sans Shift
+                    setSimulationSpeed(std::max(50.0f, getSimulationSpeed() - 50.0f));
+                    std::cout << "Vitesse accélérée à: " << getSimulationSpeed() << "ms" << std::endl;
+                    break;
 
-                case sf::Keyboard::Down:
-                {
-                    float newSpeed = std::max(MIN_SPEED, simulationSpeed - 100.0f);
-                    if (newSpeed != simulationSpeed) {
-                        simulationSpeed = newSpeed;
-                        std::cout << "Vitesse accélérée à: " << simulationSpeed << "ms" << std::endl;
-                    }
-                }
-                break;
+                case sf::Keyboard::Subtract:
+                case sf::Keyboard::Dash:     // Pour le - sans Shift
+                    setSimulationSpeed(std::min(1000.0f, getSimulationSpeed() + 50.0f));
+                    std::cout << "Vitesse ralentie à: " << getSimulationSpeed() << "ms" << std::endl;
+                    break;
 
                 case sf::Keyboard::Space:
                     isPaused = !isPaused;
                     std::cout << "Simulation " << (isPaused ? "en pause" : "reprise")
-                        << " (Vitesse actuelle: " << simulationSpeed << "ms)" << std::endl;
+                        << " (Vitesse actuelle: " << getSimulationSpeed() << "ms)" << std::endl;
+                    break;
+
+                case sf::Keyboard::C:
+                    for (int y = 0; y < grid->getHeight(); y++) {
+                        for (int x = 0; x < grid->getWidth(); x++) {
+                            grid->setCellState(x, y, false, false);
+                        }
+                    }
+                    std::cout << "Grille effacée" << std::endl;
+                    break;
+
+                case sf::Keyboard::R:
+                    for (int y = 0; y < grid->getHeight(); y++) {
+                        for (int x = 0; x < grid->getWidth(); x++) {
+                            grid->setCellState(x, y, rand() % 2 == 1, false);
+                        }
+                    }
+                    std::cout << "Remplissage aléatoire" << std::endl;
+                    break;
+
+                case sf::Keyboard::H:
+                    std::cout << "\nControls:\n"
+                        << "Clic gauche - Activer une cellule\n"
+                        << "Clic droit - Désactiver une cellule\n"
+                        << "Espace - Pause/Reprise\n"
+                        << "+/- - Ajuster la vitesse\n"
+                        << "G - Placer un planeur\n"
+                        << "B - Placer un bloc\n"
+                        << "L - Placer un clignotant\n"
+                        << "C - Effacer la grille\n"
+                        << "R - Remplissage aléatoire\n"
+                        << "H - Afficher l'aide\n"
+                        << "Échap - Quitter\n";
                     break;
 
                 case sf::Keyboard::Escape:
@@ -286,6 +315,10 @@ bool SFMLRender::isOpen() const {
 
 bool SFMLRender::isPauseActive() const {
     return isPaused;
+}
+
+void SFMLRender::setSimulationSpeed(float speed) {
+    simulationSpeed = std::clamp(speed, 50.0f, 1000.0f);
 }
 
 float SFMLRender::getSimulationSpeed() const {

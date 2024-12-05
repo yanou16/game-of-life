@@ -12,10 +12,10 @@ private:
     float cellSize;
     sf::Vector2i mousePosition;
 
-    // Constantes et variables pour la vitesse de simulation
+    // Constantes pour la vitesse de simulation
     static constexpr float MIN_SPEED = 50.0f;      // Vitesse minimale
     static constexpr float MAX_SPEED = 1000.0f;    // Vitesse maximale
-    float simulationSpeed = 1000.0f;               // Vitesse initiale
+    float simulationSpeed = 1000.0f;               // Une seule déclaration ici
 
     // Membres pour le bouton Info
     sf::RectangleShape infoButton;
@@ -41,5 +41,6 @@ public:
     bool isOpen() const override;
     void handleEvents(Grid* grid = nullptr) override;
     bool isPauseActive() const;
-    float getSimulationSpeed() const;
+    void setSimulationSpeed(float speed) override;
+    float getSimulationSpeed() const override;
 };
