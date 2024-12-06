@@ -33,7 +33,7 @@ Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulair
 ### Contrôles Détaillés
 | Touche | Action |
 |--------|--------|
-| Espace | Pause/Reprise |
+| A | Pause/Reprise |
 | +/- | Ajuster la vitesse |
 | C | Effacer la grille |
 | R | Remplissage aléatoire |
