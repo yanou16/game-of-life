@@ -49,22 +49,34 @@ Le Jeu de la Vie de Conway est une simulation basée sur des automates cellulair
 
 ## 🏗️ Architecture Technique
 
-### Structure du Projet
+## Classes Principales
 
-### Classes Principales
-#### 🎮 GameOfLife
-- Gestion du jeu
-- Contrôle de la simulation
-- Interface avec les renderers
+## 🎮 GameOfLife
+- Gestion centrale de la simulation et des règles du jeu.
+- Contrôle du cycle de vie : initialisation, mise à jour et rendu.
+- Interface avec les renderers pour l'affichage (graphique ou console).
 
-#### 📐 Grid
-- Implémentation des règles
-- Gestion des états des cellules
-- Calcul des générations
+## 📐 Grid
+- Gestion de la grille contenant les cellules du jeu.
+- Implémentation des règles d'évolution pour chaque génération.
+- Calcul des états futurs des cellules (vivantes ou mortes) et gestion des voisins.
 
-#### 🖼️ Render (Interface)
-- `SFMLRender`: Rendu graphique
-- `ConsoleRender`: Rendu texte
+## 🧩 Cell
+- Représentation individuelle d'une cellule.
+- Contient son état (vivante ou morte) et sa position sur la grille.
+- Fournit des méthodes pour définir ou obtenir son état.
+
+## 🖼️ Render (Interface)
+- Interface abstraite définissant les fonctionnalités des modules de rendu.
+- SFMLRender : Gestion du rendu graphique avec SFML pour une interface utilisateur interactive et visuelle.
+- ConsoleRender : Rendu texte en mode console pour une visualisation simple.
+
+## 📂 FileService
+- Gestion des opérations liées aux fichiers et répertoires pour le jeu.
+- Sauvegarde : Enregistre l'état de la grille dans un fichier texte.
+- Chargement : Lit un état initial depuis un fichier pour configurer la grille.
+- Exportation : Génération de fichiers pour enregistrer les états successifs de la simulation.
+- Gestion des répertoires : Création et vérification des dossiers nécessaires pour les fichiers.
 
 ## 🧪 Tests
 
