@@ -126,7 +126,7 @@ Le jeu peut être configuré de plusieurs façons :
 - **Clic droit** : Supprimer une cellule.
 
 #### Clavier :
-- **Espace** : Pause/Reprise de la simulation.
+- **A** : Pause/Reprise de la simulation.
 - **+/-** : Ajuster la vitesse.
 - **C** : Effacer toute la grille.
 - **R** : Remplissage aléatoire de cellules.
