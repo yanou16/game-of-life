@@ -186,8 +186,6 @@ ssp/
 
 Ce projet est sous licence MIT. Consultez le fichier `LICENSE` pour plus de détails.
 
-## 👥 Auteurs
-Les auteurs de ce guide et les reponsables du projet: @shenzhenyz @yannou16
 # Version Finale
 Version actuelle et stable du jeu :
 - Pause avec touche 'A'
@@ -197,3 +195,6 @@ Version actuelle et stable du jeu :
 - Interface utilisateur complète
 
 ![image](https://github.com/user-attachments/assets/7261aac5-a3c1-493b-98cd-4499aabf70ea)
+
+## 👥 Auteurs
+Les auteurs de ce guide et les reponsables du projet: @shenzhenyz (Manil) @yannou16 (Rayane)
